@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import CartIcon from './CartIcon';
+import UserLinks from './UserLinks';
 
 const links = [
   { id: 1, title: 'Homepage', url: '/' },
@@ -13,7 +14,6 @@ const links = [
 
 const Menu = () => {
   const [open, setOpen] = useState(false);
-  const user = false;
   return (
     <div>
       <div>
@@ -42,15 +42,7 @@ const Menu = () => {
               {link.title}
             </Link>
           ))}
-          {user ? (
-            <Link href={'/orders'} onClick={() => setOpen(false)}>
-              Orders
-            </Link>
-          ) : (
-            <Link href={'/login'} onClick={() => setOpen(false)}>
-              Login
-            </Link>
-          )}
+          {<UserLinks setOpen={setOpen} />}
           <Link href={'/cart'} onClick={() => setOpen(false)}>
             <CartIcon />
           </Link>

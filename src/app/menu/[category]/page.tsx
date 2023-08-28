@@ -1,11 +1,57 @@
-import { pizzas } from '@/data';
+import { ProductsType } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const CategoryPage = () => {
+const getData = async (category: string) => {
+  const res = await fetch(
+    `http://localhost:3000/api/products?category=${category}`,
+    {
+      cache: 'no-store',
+    }
+  );
+
+  if (!res.ok) {
+    console.log(res);
+    const dumb: ProductsType = {
+      message: 'Error',
+      data: [
+        {
+          id: '1',
+          title: 'Sicilian',
+          desc: 'Ignite your taste buds with a fiery combination of spicy pepperoni, jalapeños, crushed red pepper flakes, and melted mozzarella cheese, delivering a kick with every bite.',
+          img: '/temporary/p1.png',
+          price: 24.9,
+          options: [
+            {
+              title: 'Small',
+              additionalPrice: 0,
+            },
+            {
+              title: 'Medium',
+              additionalPrice: 4,
+            },
+            {
+              title: 'Large',
+              additionalPrice: 6,
+            },
+          ],
+        },
+      ],
+    };
+    return dumb;
+  }
+  return res.json();
+};
+
+type Props = {
+  params: { category: string };
+};
+
+const CategoryPage = async ({ params }: Props) => {
+  const product: ProductsType = await getData(params.category);
   return (
     <section className="flex flex-wrap text-green-500 lg:px-20 xl:px-40">
-      {pizzas.map((pizza) => (
+      {product.data?.map((pizza) => (
         <Link
           key={pizza.id}
           href={`/product/${pizza.id}`}

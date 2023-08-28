@@ -1,10 +1,36 @@
-import { menu } from '@/data';
+import { MenuType } from '@/types/types';
 import Link from 'next/link';
 
-const MenuPage = () => {
+const getData = async () => {
+  const res = await fetch('http://localhost:3000/api/categories', {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    console.log(res);
+    const dumb: MenuType = {
+      message: 'Error',
+      data: [
+        {
+          id: '1',
+          slug: 'pastas',
+          title: 'Italian Pastas',
+          desc: 'Savor the taste of perfection with our exquisite Italian handmade pasta menu.',
+          img: '/temporary/m1.png',
+          color: 'red',
+        },
+      ],
+    };
+    return dumb;
+  }
+  return res.json();
+};
+
+const MenuPage = async () => {
+  const menu: MenuType = await getData();
   return (
     <section className="px-4 py-10 lg:px-20 xl:px-40 min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)] flex flex-col md:flex-row md:items-center">
-      {menu.map((cat) => (
+      {menu.data?.map((cat) => (
         <Link
           key={cat.id}
           href={`/menu/${cat.slug}`}
