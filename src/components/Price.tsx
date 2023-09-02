@@ -11,12 +11,12 @@ const Price = ({ product }: { product: SingleProductType }) => {
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
-    setTotalPrice(
+    const calc =
       quantity *
-        (options?.length && options
-          ? price + options[selected].additionalPrice
-          : price)
-    );
+      (options?.length && options
+        ? Number(price) + Number(options[selected].additionalPrice)
+        : Number(price));
+    setTotalPrice(Number(calc.toFixed(2)));
   }, [quantity, selected, price, options]);
 
   const { addTocart } = useCartStore();

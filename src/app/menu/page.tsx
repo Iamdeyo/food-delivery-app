@@ -1,5 +1,6 @@
 import { MenuType } from '@/types/types';
 import Link from 'next/link';
+import Loading from '../loading';
 
 const getData = async () => {
   const res = await fetch('http://localhost:3000/api/categories', {
@@ -28,6 +29,7 @@ const getData = async () => {
 
 const MenuPage = async () => {
   const menu: MenuType = await getData();
+
   return (
     <section className="px-4 py-10 lg:px-20 xl:px-40 min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)] flex flex-col md:flex-row md:items-center">
       {menu.data?.map((cat) => (

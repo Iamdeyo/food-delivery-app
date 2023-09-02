@@ -60,4 +60,5 @@ export type SingleProductType = {
 export type ActionTypes = {
   addTocart: (item: CartItemType) => void;
   removeFromcart: (item: CartItemType) => void;
+  removeAllFromcart: () => void;
 };

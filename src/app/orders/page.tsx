@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
+import Loading from '../loading';
 
 const OrdersPage = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const OrdersPage = () => {
     input.value = '';
   };
 
-  if (isLoading && session) return 'Loading...';
+  if (isLoading && session) return <Loading />;
 
   return (
     <section className="px-4 lg:px-20 min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)]">

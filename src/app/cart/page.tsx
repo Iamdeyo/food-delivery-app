@@ -3,13 +3,42 @@ import { singleProduct } from '@/data';
 import { useCartStore } from '@/utils/store';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const { products, totalItems, totalPrice, removeFromcart } = useCartStore();
-
+  const { data: session } = useSession();
+  const router = useRouter();
   useEffect(() => {
     useCartStore.persist.rehydrate();
   }, []);
+
+  const handleCheckout = async () => {
+    if (!session) {
+      toast.info('Login to continue');
+      router.push('/login');
+    } else {
+      try {
+        const res = await fetch('http://localhost:3000/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            price: totalPrice,
+            product: products,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+        if (res.ok) {
+          router.push('/pay/' + data.data.id);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
   return (
     <section className="flex flex-col md:flex-row justify-between  min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)]">
       {/* PRODUCT CONTAINER */}
@@ -57,9 +86,12 @@ const CartPage = () => {
           </div>
           <div className="flex justify-between mb-4 font-semibold text-lg pt-4 border-t border-t-green-300">
             <p> TOTAL(INCL. VAT) </p>
-            <span> $89.00 </span>
+            <span> ${totalPrice} </span>
           </div>
-          <button className="ml-auto rounded-md py-3 px-9 bg-green-500 text-white hover:bg-green-400">
+          <button
+            className="ml-auto rounded-md py-3 px-9 bg-green-500 text-white hover:bg-green-400"
+            onClick={handleCheckout}
+          >
             CHECKOUT
           </button>
         </div>
