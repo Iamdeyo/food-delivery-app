@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   type Inputs = {
     title: string;
     desc: string;
@@ -94,6 +96,7 @@ const AddPage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     // console.log({ ...inputs, options, img: await uploadImg() });
 
     const res = await fetch('http://localhost:3000/api/products', {
@@ -104,10 +107,10 @@ const AddPage = () => {
 
     const data = await res.json();
     if (res.ok) {
-      console.log(data);
       toast.success(data.message);
       router.push(`/product/${data.data.id}`);
     } else {
+      setIsLoading(false);
       toast.error(data.message);
     }
   };
@@ -155,6 +158,7 @@ const AddPage = () => {
         <input
           className="w-full py-2 px-1 rounded-lg outline-none border-gray-400 focus:border-green-500 border mb-5 "
           type="number"
+          step="any"
           id="price"
           name="price"
           onChange={changeInputs}
@@ -214,7 +218,10 @@ const AddPage = () => {
           </span>
         </div>
 
-        <button className="bg-green-400 text-white font-semibold rounded-lg py-2 md:w-60 hover:bg-green-500">
+        <button
+          className="bg-green-400 text-white font-semibold rounded-lg py-2 md:w-60 hover:bg-green-500 disabled:cursor-not-allowed disabled:bg-green-300"
+          disabled={isLoading}
+        >
           Submit
         </button>
       </form>

@@ -1,5 +1,4 @@
 'use client';
-import { singleProduct } from '@/data';
 import { useCartStore } from '@/utils/store';
 import Image from 'next/image';
 import { useEffect } from 'react';
@@ -9,6 +8,7 @@ import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const { products, totalItems, totalPrice, removeFromcart } = useCartStore();
+  console.log(products);
   const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
@@ -25,7 +25,7 @@ const CartPage = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            price: totalPrice,
+            price: Number(totalPrice).toFixed(2),
             product: products,
           }),
         });
@@ -47,7 +47,7 @@ const CartPage = () => {
         {products.map((product) => (
           <div className="text-green-500 w-full lg:w-3/4 flex justify-between px-4 py-2 items-center border-b border-b-green-500">
             <Image
-              src={singleProduct.img}
+              src={product?.img || ''}
               alt="product"
               width={100}
               height={100}
@@ -55,7 +55,7 @@ const CartPage = () => {
 
             <div className="">
               <h2 className="font-bold text-xl uppercase">
-                {product.title} (X{totalItems})
+                {product.title} (X{product.quantity})
               </h2>
               <p className="text-sm">{product.optionTitle}</p>
             </div>
@@ -74,7 +74,7 @@ const CartPage = () => {
         <div className="flex flex-col lg:w-3/4">
           <div className="flex justify-between mb-4">
             <p> Subtotal ({totalItems} items) </p>
-            <span> ${totalPrice}</span>
+            <span> ${Number(totalPrice).toFixed(2)}</span>
           </div>
           <div className="flex justify-between mb-4">
             <p> Service Cost </p>
@@ -86,7 +86,7 @@ const CartPage = () => {
           </div>
           <div className="flex justify-between mb-4 font-semibold text-lg pt-4 border-t border-t-green-300">
             <p> TOTAL(INCL. VAT) </p>
-            <span> ${totalPrice} </span>
+            <span> ${Number(totalPrice).toFixed(2)} </span>
           </div>
           <button
             className="ml-auto rounded-md py-3 px-9 bg-green-500 text-white hover:bg-green-400"
