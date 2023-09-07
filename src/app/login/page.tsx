@@ -7,17 +7,7 @@ import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
   const router = useRouter();
-  const { data, status } = useSession();
-  console.log('status: ' + status);
-  console.log(data);
-
-  if (status === 'loading') {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  const { status } = useSession();
 
   if (status === 'authenticated') {
     router.push('/');

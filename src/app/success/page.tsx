@@ -3,6 +3,7 @@
 import { useCartStore } from '@/utils/store';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const SuccessPage = () => {
   const { removeAllFromcart } = useCartStore();
@@ -20,7 +21,7 @@ const SuccessPage = () => {
         removeAllFromcart();
         router.push('/orders');
       } catch (err) {
-        console.log(err);
+        toast.error('something went wrong');
       }
     };
     makeRequest();

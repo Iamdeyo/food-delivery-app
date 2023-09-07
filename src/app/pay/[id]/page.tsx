@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from '@/components/CheckoutForm';
+import { toast } from 'react-toastify';
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
@@ -25,7 +26,7 @@ const PaymentPage = ({ params }: { params: { id: string } }) => {
         const data = await res.json();
         setClientSecret(data.clientSecret);
       } catch (err) {
-        console.log(err);
+        toast.error('Something went wrong');
       }
     };
 

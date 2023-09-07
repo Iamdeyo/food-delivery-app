@@ -26,7 +26,6 @@ export const GET = async (
       data: product,
     });
   } catch (err) {
-    console.log(err);
     return NextResponse.json({ status: 500, message: 'Server error' });
   }
 };
@@ -50,7 +49,6 @@ export const DELETE = async (
         message: 'Product deleted',
       });
     } catch (err) {
-      console.log(err);
       return NextResponse.json({ status: 500, message: 'Server error' });
     }
   } else {

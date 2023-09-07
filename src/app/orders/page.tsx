@@ -17,7 +17,6 @@ const OrdersPage = () => {
     queryFn: () =>
       fetch('http://localhost:3000/api/orders').then((res) => res.json()),
   });
-  // console.log(data);
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/');
@@ -70,9 +69,7 @@ const OrdersPage = () => {
             data?.data?.map((order: OrderType) => (
               <tr
                 className={` ${
-                  order.status === 'Delivered'
-                    ? 'bg-green-200'
-                    : 'bg-fuchsia-50'
+                  order.status === 'Delivered' ? 'bg-green-200' : 'bg-gray-100'
                 } text-sm md:text-base`}
                 key={order.id}
               >

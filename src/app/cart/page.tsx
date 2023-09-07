@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const { products, totalItems, totalPrice, removeFromcart } = useCartStore();
-  console.log(products);
   const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
@@ -30,12 +29,12 @@ const CartPage = () => {
           }),
         });
         const data = await res.json();
-        console.log(data);
+
         if (res.ok) {
           router.push('/pay/' + data.data.id);
         }
       } catch (err) {
-        console.log(err);
+        toast.error('Something went wrong!');
       }
     }
   };

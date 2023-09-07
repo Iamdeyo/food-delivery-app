@@ -45,7 +45,6 @@ export const POST = async (
       { status: 200 }
     );
   } catch (err) {
-    console.log(err);
     return new NextResponse(JSON.stringify({ message: 'Server error' }), {
       status: 500,
     });

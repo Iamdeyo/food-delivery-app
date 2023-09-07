@@ -32,7 +32,6 @@ export const GET = async (req: NextRequest) => {
       );
     }
   } catch (err) {
-    console.log(err);
     return new NextResponse(
       JSON.stringify({ message: 'Something went wrong' }),
       { status: 500 }
@@ -47,12 +46,6 @@ export const POST = async (req: NextRequest) => {
     try {
       const body = await req.json();
 
-      // console.log({
-      //   ...body,
-      //   userEmail: session.user.email,
-      //   status: 'Not Paid',
-      // });
-
       const order = await prisma.order.create({
         data: { ...body, userEmail: session.user.email, status: 'Not Paid' },
       });
@@ -62,7 +55,6 @@ export const POST = async (req: NextRequest) => {
         { status: 200 }
       );
     } catch (err) {
-      console.log(err);
       return new NextResponse(
         JSON.stringify({ message: 'Something went wrong' }),
         { status: 500 }

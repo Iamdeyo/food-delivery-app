@@ -1,10 +1,19 @@
 'use client';
-
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddPage = () => {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'unauthenticated' || session?.user.isAdmin === false) {
+      router.push('/');
+    }
+  }, [status, router]);
+
   const [isLoading, setIsLoading] = useState(false);
 
   type Inputs = {
@@ -92,12 +101,9 @@ const AddPage = () => {
     // 'curl https://api.cloudinary.com/v1_1/<CLOUD_NAME>/image/upload -X POST --data 'file=<FILE>&timestamp=<TIMESTAMP>&api_key=<API_KEY>&signature=<SIGNATURE>'
   };
 
-  const router = useRouter();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    // console.log({ ...inputs, options, img: await uploadImg() });
 
     const res = await fetch('http://localhost:3000/api/products', {
       method: 'POST',
