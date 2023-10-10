@@ -44,7 +44,7 @@ const CartPage = () => {
       <div className="w-full flex flex-col items-center justify-center">
         {/* SINGLE PRODUCT  */}
         {products.map((product) => (
-          <div className="text-green-500 w-full lg:w-3/4 flex justify-between px-4 py-2 items-center border-b border-b-green-500">
+          <div key={product.id} className="text-green-500 w-full lg:w-3/4 flex justify-between px-4 py-2 items-center border-b border-b-green-500">
             <Image
               src={product?.img || ''}
               alt="product"

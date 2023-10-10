@@ -33,7 +33,7 @@ const Slider = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-6rem)] md:min-h-[calc(100vh-9rem)] lg:flex-row bg-lime-100">
+    <div className="flex flex-col h-[calc(100vh-6rem)] max-h-[700px] md:h-[calc(100vh-9rem)] lg:flex-row bg-lime-100">
       {/* TEXT CONTAINER */}
       <div className="w-full flex flex-col items-center min-h-[300px] justify-center gap-8 font-bold flex-1">
         <h1 className="text-green-500 text-center p-4 md:p-10 text-2xl uppercase sm:text-4xl md:text-6xl lg:text-7xl ">

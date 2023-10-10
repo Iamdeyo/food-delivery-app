@@ -12,7 +12,7 @@ const AddPage = () => {
     if (status === 'unauthenticated' || session?.user.isAdmin === false) {
       router.push('/');
     }
-  }, [status, router]);
+  }, [status, router, session?.user.isAdmin]);
 
   const [isLoading, setIsLoading] = useState(false);
 

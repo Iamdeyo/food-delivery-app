@@ -25,7 +25,7 @@ const SuccessPage = () => {
       }
     };
     makeRequest();
-  }, [intentId, router]);
+  }, [intentId, router, removeAllFromcart]);
 
   return (
     <section className="px-4 py-10 lg:px-20 xl:px-40 min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)] flex items-center flex-col justify-center text-center text-xl md:text-2xl font-semibold">
