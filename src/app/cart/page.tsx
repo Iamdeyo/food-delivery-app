@@ -1,10 +1,10 @@
-'use client';
-import { useCartStore } from '@/utils/store';
-import Image from 'next/image';
-import { useEffect } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+"use client";
+import { useCartStore } from "@/utils/store";
+import Image from "next/image";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
   const { products, totalItems, totalPrice, removeFromcart } = useCartStore();
@@ -16,25 +16,28 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     if (!session) {
-      toast.info('Login to continue');
-      router.push('/login');
+      toast.info("Login to continue");
+      router.push("/login");
     } else {
       try {
-        const res = await fetch('http://localhost:3000/api/orders', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            price: Number(totalPrice).toFixed(2),
-            product: products,
-          }),
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              price: Number(totalPrice).toFixed(2),
+              product: products,
+            }),
+          }
+        );
         const data = await res.json();
 
         if (res.ok) {
-          router.push('/pay/' + data.data.id);
+          router.push("/pay/" + data.data.id);
         }
       } catch (err) {
-        toast.error('Something went wrong!');
+        toast.error("Something went wrong!");
       }
     }
   };
@@ -44,9 +47,12 @@ const CartPage = () => {
       <div className="w-full flex flex-col items-center justify-center">
         {/* SINGLE PRODUCT  */}
         {products.map((product) => (
-          <div key={product.id} className="text-green-500 w-full lg:w-3/4 flex justify-between px-4 py-2 items-center border-b border-b-green-500">
+          <div
+            key={product.id}
+            className="text-green-500 w-full lg:w-3/4 flex justify-between px-4 py-2 items-center border-b border-b-green-500"
+          >
             <Image
-              src={product?.img || ''}
+              src={product?.img || ""}
               alt="product"
               width={100}
               height={100}

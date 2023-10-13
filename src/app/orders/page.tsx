@@ -1,25 +1,27 @@
-'use client';
+"use client";
 
-import { useSession } from 'next-auth/react';
-import { OrderType } from '@/types/types';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import Image from 'next/image';
-import { toast } from 'react-toastify';
-import Loading from '../loading';
+import { useSession } from "next-auth/react";
+import { OrderType } from "@/types/types";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import Image from "next/image";
+import { toast } from "react-toastify";
+import Loading from "../loading";
 
 const OrdersPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { isLoading, error, data } = useQuery({
-    queryKey: ['orders'],
+    queryKey: ["orders"],
     queryFn: () =>
-      fetch('http://localhost:3000/api/orders').then((res) => res.json()),
+      fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders`).then((res) =>
+        res.json()
+      ),
   });
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/');
+    if (status === "unauthenticated") {
+      router.push("/");
     }
   }, [status, router]);
 
@@ -27,16 +29,16 @@ const OrdersPage = () => {
 
   const mutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: string }) => {
-      return fetch(`http://localhost:3000/api/orders/${id}`, {
-        method: 'PUT',
+      return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/orders/${id}`, {
+        method: "PUT",
         headers: {
-          'content-type': 'application/json',
+          "content-type": "application/json",
         },
         body: JSON.stringify(status),
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
   });
 
@@ -46,8 +48,8 @@ const OrdersPage = () => {
     const input = form.elements[0] as HTMLInputElement;
     const status = input.value;
     mutation.mutate({ id, status });
-    toast.success('Order status updated');
-    input.value = '';
+    toast.success("Order status updated");
+    input.value = "";
   };
 
   if (isLoading && session) return <Loading />;
@@ -69,7 +71,7 @@ const OrdersPage = () => {
             data?.data?.map((order: OrderType) => (
               <tr
                 className={` ${
-                  order.status === 'Delivered' ? 'bg-green-200' : 'bg-gray-100'
+                  order.status === "Delivered" ? "bg-green-200" : "bg-gray-100"
                 } text-sm md:text-base`}
                 key={order.id}
               >

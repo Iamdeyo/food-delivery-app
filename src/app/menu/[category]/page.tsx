@@ -1,19 +1,23 @@
-import { ProductsType } from '@/types/types';
-import Image from 'next/image';
-import Link from 'next/link';
+import { ProductsType } from "@/types/types";
+import Image from "next/image";
+import Link from "next/link";
 
 const getData = async (category: string) => {
-  const res = await fetch(
-    `http://localhost:3000/api/products?category=${category}`,
-    {
-      cache: 'no-store',
-    }
-  );
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products?category=${category}`,
+      {
+        cache: "no-store",
+      }
+    );
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return null;
+    }
+    return res.json();
+  } catch (error) {
     return null;
   }
-  return res.json();
 };
 
 type Props = {
@@ -21,7 +25,7 @@ type Props = {
 };
 
 const CategoryPage = async ({ params }: Props) => {
-  const product: ProductsType = await getData(params.category);
+  const product: ProductsType | null = await getData(params.category);
 
   return (
     <section className=" px-4 py-10 lg:px-20 xl:px-40 min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)]">
@@ -33,7 +37,6 @@ const CategoryPage = async ({ params }: Props) => {
               href={`/product/${pizza.id}`}
               className="w-full max-w-sm sm:max-w-none flex flex-col border-green-500 border shadow-xl transition-all duration-300 sm:w-[calc(50%-10px)] md:border-r md:border-l lg:w-[calc(33.33333%-20px)] hover:bg-lime-100 group h-fit"
             >
-              {/* IMAGE CONTAINER */}
               <div className="relative w-full aspect-square overflow-hidden">
                 <Image
                   src={pizza.img}
@@ -43,7 +46,7 @@ const CategoryPage = async ({ params }: Props) => {
                   className="object-cover group-hover:scale-110 transition-all duration-300"
                 />
               </div>
-              {/* TEXT CONTAINER */}
+
               <div className="flex items-center text-white bg-green-500 justify-between gap-4 px-4 py-4 pb-6">
                 <h2 className="font-bold flex-1 truncate w-full text-xl">
                   {pizza.title}

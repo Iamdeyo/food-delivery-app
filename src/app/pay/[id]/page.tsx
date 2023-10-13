@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import CheckoutForm from '@/components/CheckoutForm';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from "react";
+import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import CheckoutForm from "@/components/CheckoutForm";
+import { toast } from "react-toastify";
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 );
@@ -12,21 +12,21 @@ const stripePromise = loadStripe(
 const PaymentPage = ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
-  const [clientSecret, setClientSecret] = useState('');
+  const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
     const makeRequest = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/create-intent/${id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/create-intent/${id}`,
           {
-            method: 'POST',
+            method: "POST",
           }
         );
         const data = await res.json();
         setClientSecret(data.clientSecret);
       } catch (err) {
-        toast.error('Something went wrong');
+        toast.error("Something went wrong");
       }
     };
 
@@ -36,7 +36,7 @@ const PaymentPage = ({ params }: { params: { id: string } }) => {
   const options: StripeElementsOptions = {
     clientSecret,
     appearance: {
-      theme: 'stripe',
+      theme: "stripe",
     },
   };
 

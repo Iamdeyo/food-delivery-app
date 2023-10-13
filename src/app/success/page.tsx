@@ -1,27 +1,30 @@
-'use client';
+"use client";
 
-import { useCartStore } from '@/utils/store';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
+import { useCartStore } from "@/utils/store";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const SuccessPage = () => {
   const { removeAllFromcart } = useCartStore();
   const searchParams = useSearchParams();
-  const intentId = searchParams.get('payment_intent');
+  const intentId = searchParams.get("payment_intent");
 
   const router = useRouter();
 
   useEffect(() => {
     const makeRequest = async () => {
       try {
-        await fetch(`http://localhost:3000/api/confirm/${intentId}`, {
-          method: 'PUT',
-        });
+        await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/confirm/${intentId}`,
+          {
+            method: "PUT",
+          }
+        );
         removeAllFromcart();
-        router.push('/orders');
+        router.push("/orders");
       } catch (err) {
-        toast.error('something went wrong');
+        toast.error("something went wrong");
       }
     };
     makeRequest();

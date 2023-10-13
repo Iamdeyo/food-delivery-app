@@ -1,16 +1,22 @@
-import DeleteButton from '@/components/DeleteButton';
-import Price from '@/components/Price';
-import { SingleProductType } from '@/types/types';
-import Image from 'next/image';
+import DeleteButton from "@/components/DeleteButton";
+import Price from "@/components/Price";
+import { SingleProductType } from "@/types/types";
+import Image from "next/image";
 
 const getData = async (id: string) => {
-  const res = await fetch(`http://localhost:3000/api/products/${id}`);
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${id}`
+    );
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return null;
+    }
+
+    return await res.json();
+  } catch (error) {
     return null;
   }
-
-  return await res.json();
 };
 
 type Props = {
@@ -27,7 +33,7 @@ const SingleProductPage = async ({ params }: Props) => {
           {/* IMAGE CONTAINER */}
           <div className="relative w-full aspect-square min-h-[250] max-h-[350px] md:max-h-[400px] lg:max-h-[500px]">
             <Image
-              src={product.data?.img || ''}
+              src={product.data?.img || ""}
               alt="product"
               fill
               className="object-contain"
@@ -41,7 +47,7 @@ const SingleProductPage = async ({ params }: Props) => {
             <p className="my-4"> {product.data?.desc} </p>
             <Price product={product} />
           </div>
-          <DeleteButton id={product.data?.id!} />{' '}
+          <DeleteButton id={product.data?.id!} />{" "}
         </>
       ) : (
         <>

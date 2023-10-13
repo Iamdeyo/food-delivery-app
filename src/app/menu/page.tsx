@@ -1,19 +1,26 @@
-import { MenuType } from '@/types/types';
-import Link from 'next/link';
+import { MenuType } from "@/types/types";
+import Link from "next/link";
 
 const getData = async () => {
-  const res = await fetch('http://localhost:3000/api/categories', {
-    cache: 'no-store',
-  });
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/categories`,
+      {
+        cache: "no-store",
+      }
+    );
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return null;
+    }
+    return await res.json();
+  } catch (error) {
     return null;
   }
-  return await res.json();
 };
 
 const MenuPage = async () => {
-  const menu: MenuType = await getData();
+  const menu: MenuType | null = await getData();
 
   return (
     <section className="px-4 py-10 lg:px-20 xl:px-40 min-h-[calc(100vh-9em)] md:min-h-[calc(100vh-13em)] flex flex-col md:flex-row md:items-center">
@@ -27,7 +34,7 @@ const MenuPage = async () => {
               backgroundImage: `url(${cat.img})`,
               backgroundColor: cat.color,
 
-              color: cat.color !== 'white' ? 'white' : 'black',
+              color: cat.color !== "white" ? "white" : "black",
             }}
           >
             <h2 className="text-2xl md:text-3xl uppercase font-bold max-w-[15ch]">
@@ -36,13 +43,13 @@ const MenuPage = async () => {
             <p className="max-w-[20ch] sm:max-w-[35ch]">{cat.desc}</p>
             <button
               style={{
-                color: cat.color === 'white' ? 'white' : 'black',
-                backgroundColor: cat.color !== 'white' ? 'white' : 'black',
+                color: cat.color === "white" ? "white" : "black",
+                backgroundColor: cat.color !== "white" ? "white" : "black",
               }}
               className="p-2 font-bold rounded-md hover:opacity-80"
             >
-              {' '}
-              Explore{' '}
+              {" "}
+              Explore{" "}
             </button>
           </Link>
         ))

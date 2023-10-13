@@ -1,16 +1,16 @@
-'use client';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+"use client";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const AddPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'unauthenticated' || session?.user.isAdmin === false) {
-      router.push('/');
+    if (status === "unauthenticated" || session?.user.isAdmin === false) {
+      router.push("/");
     }
   }, [status, router, session?.user.isAdmin]);
 
@@ -24,10 +24,10 @@ const AddPage = () => {
   };
 
   const [inputs, setInputs] = useState<Inputs>({
-    title: '',
-    desc: '',
+    title: "",
+    desc: "",
     price: 0,
-    catSlug: '',
+    catSlug: "",
   });
 
   const changeInputs = (
@@ -46,8 +46,8 @@ const AddPage = () => {
 
   const [options, setOptions] = useState<Option[]>([]);
   const [option, setOption] = useState<Option>({
-    id: '',
-    title: '',
+    id: "",
+    title: "",
     additionalPrice: null,
   });
 
@@ -57,7 +57,7 @@ const AddPage = () => {
 
   const addOption = () => {
     setOptions((prev) => [...prev, option]);
-    setOption({ id: '', title: '', additionalPrice: 0 });
+    setOption({ id: "", title: "", additionalPrice: 0 });
   };
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,9 +68,9 @@ const AddPage = () => {
         // generate random value as id
         id:
           e.target.value +
-          '-' +
+          "-" +
           Math.random() * 1e6 +
-          '-' +
+          "-" +
           Math.random() * 1e4,
       };
     });
@@ -87,12 +87,12 @@ const AddPage = () => {
   const uploadImg = async () => {
     const form = new FormData();
 
-    form.append('file', img!);
-    form.append('upload_preset', 'food-delivery-app');
+    form.append("file", img!);
+    form.append("upload_preset", "food-delivery-app");
 
     const res = await fetch(
-      'https://api.cloudinary.com/v1_1/dehzwowgv/image/upload',
-      { method: 'POST', body: form }
+      "https://api.cloudinary.com/v1_1/dehzwowgv/image/upload",
+      { method: "POST", body: form }
     );
 
     const data = await res.json();
@@ -105,11 +105,14 @@ const AddPage = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const res = await fetch('http://localhost:3000/api/products', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...inputs, options, img: await uploadImg() }),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...inputs, options, img: await uploadImg() }),
+      }
+    );
 
     const data = await res.json();
     if (res.ok) {
@@ -180,8 +183,8 @@ const AddPage = () => {
           onChange={changeInputs}
         />
         <label className="font-semibold text-lg" htmlFor="optionTitle">
-          {' '}
-          Options{' '}
+          {" "}
+          Options{" "}
         </label>
         {options.map((opt) => (
           <div key={opt.id} className="flex items-center mb-2">
@@ -210,7 +213,7 @@ const AddPage = () => {
           />
           <input
             onChange={handleOptionChange}
-            value={option.additionalPrice || ''}
+            value={option.additionalPrice || ""}
             type="number"
             name="additionalPrice"
             inputMode="numeric"

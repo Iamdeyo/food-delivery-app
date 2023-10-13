@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
 import {
   PaymentElement,
   LinkAuthenticationElement,
   useStripe,
   useElements,
-} from '@stripe/react-stripe-js';
+} from "@stripe/react-stripe-js";
 
-import { useEffect, useState } from 'react';
-import AdressForm from './AdressForm';
+import { useEffect, useState } from "react";
+import AdressForm from "./AdressForm";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,7 +24,7 @@ const CheckoutForm = () => {
     }
 
     const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
+      "payment_intent_client_secret"
     );
 
     if (!clientSecret) {
@@ -33,17 +33,17 @@ const CheckoutForm = () => {
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent?.status) {
-        case 'succeeded':
-          setMessage('Payment succeeded!');
+        case "succeeded":
+          setMessage("Payment succeeded!");
           break;
-        case 'processing':
-          setMessage('Your payment is processing.');
+        case "processing":
+          setMessage("Your payment is processing.");
           break;
-        case 'requires_payment_method':
-          setMessage('Your payment was not successful, please try again.');
+        case "requires_payment_method":
+          setMessage("Your payment was not successful, please try again.");
           break;
         default:
-          setMessage('Something went wrong.');
+          setMessage("Something went wrong.");
           break;
       }
     });
@@ -64,7 +64,7 @@ const CheckoutForm = () => {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: 'http://localhost:3000/success',
+        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/success`,
       },
     });
 
@@ -73,10 +73,10 @@ const CheckoutForm = () => {
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === 'card_error' || error.type === 'validation_error') {
-      setMessage(error.message || 'Someting went wrong');
+    if (error.type === "card_error" || error.type === "validation_error") {
+      setMessage(error.message || "Someting went wrong");
     } else {
-      setMessage('An unexpected error occurred.');
+      setMessage("An unexpected error occurred.");
     }
 
     setIsLoading(false);
@@ -92,7 +92,7 @@ const CheckoutForm = () => {
       <PaymentElement
         id="payment-element"
         options={{
-          layout: 'tabs',
+          layout: "tabs",
         }}
       />
       <AdressForm />
@@ -102,7 +102,7 @@ const CheckoutForm = () => {
         id="submit"
       >
         <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : 'Pay now'}
+          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay now"}
         </span>
       </button>
       {/* Show any error or success messages */}

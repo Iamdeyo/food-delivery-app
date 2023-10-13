@@ -1,24 +1,32 @@
-import { ProductsType } from '@/types/types';
-import Image from 'next/image';
+import { ProductsType } from "@/types/types";
+import Image from "next/image";
 
 const getData = async () => {
-  const res = await fetch('http://localhost:3000/api/products', {
-    cache: 'no-store',
-  });
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/products`,
+      {
+        cache: "no-store",
+      }
+    );
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return null;
+    }
+    return res.json();
+  } catch (error) {
     return null;
   }
-  return res.json();
 };
 const Featured = async () => {
-  const featuredProducts: ProductsType = await getData();
+  const featuredProducts: ProductsType | null = await getData();
   return (
     <div className="w-screen overflow-x-auto text-green-500 flex snap-x snap-mandatory">
       {/* WRAPPER */}
 
       {/* SINGLE ITEM */}
-      {featuredProducts.data?.length ? (
+
+      {featuredProducts && featuredProducts.data?.length ? (
         featuredProducts.data?.map((product) => (
           <div
             key={product.id}
@@ -51,7 +59,7 @@ const Featured = async () => {
         ))
       ) : (
         <>
-          {' '}
+          {" "}
           <div className="py-5 text-lg text-center w-full">
             <p>No Featured Products</p>
           </div>
