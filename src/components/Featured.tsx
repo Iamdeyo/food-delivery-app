@@ -1,5 +1,7 @@
 import { ProductsType } from "@/types/types";
 import Image from "next/image";
+import Link from "next/link";
+import AddToCart from "./AddToCart";
 
 const getData = async () => {
   try {
@@ -21,7 +23,7 @@ const getData = async () => {
 const Featured = async () => {
   const featuredProducts: ProductsType | null = await getData();
   return (
-    <div className="w-screen overflow-x-auto text-green-500 flex snap-x snap-mandatory">
+    <div className="border-t-4 border-t-green-500 w-screen overflow-x-auto text-green-500 flex snap-x snap-mandatory">
       {/* WRAPPER */}
 
       {/* SINGLE ITEM */}
@@ -30,30 +32,33 @@ const Featured = async () => {
         featuredProducts.data?.map((product) => (
           <div
             key={product.id}
-            className="snap-start w-screen h-[450px] flex-none flex flex-col items-center text-center pt-2 pb-4 px-4 hover:bg-lime-100 transition-all duration-300 md:w-[50vw] lg:w-1/3 lg:h-[550px]"
+            className="snap-start w-screen h-[400px] flex-none flex flex-col items-center text-center hover:bg-lime-100 transition-all duration-300 group md:border-r border-green-500 sm:w-[50vw] lg:w-1/3 lg:h-[500px]"
           >
             {/* IMAGE CONTAINER */}
-            <div className="relative flex-1 w-full hover:rotate-45 transition-all duration-500">
+            <div className="relative h-1/2 flex-none w-full transition-all duration-500 overflow-hidden">
               <Image
                 src={product.img}
                 alt="product"
                 fill
                 sizes="100%"
-                className="object-contain"
+                className="object-cover group-hover:scale-125  transition-all duration-500"
               />
             </div>
             {/* TEXT CONTAINER */}
-            <div className="flex flex-col items-center justify-center pt-2">
-              <h2 className="text-xl font-bold uppercase lg:text-2xl">
+            <div className="flex h-1/2 justify-between flex-none flex-col items-center py-2 px-4 w-full">
+              <Link
+                href={`/product/${product.id}`}
+                className="text-xl font-bold uppercase hover:underline underline-offset-4 lg:text-2xl"
+              >
                 {product.title}
-              </h2>
-              <p className="text-sm p-4 lg:p-6"> {product.desc} </p>
+              </Link>
+              <p className="text-sm lg:my-4 line-clamp-3">{product.desc}</p>
               <span className="text-xl font-bold lg:text-2xl">
                 ${product.price}
               </span>
-              <button className="rounded-md p-2 bg-green-500 text-white hover:bg-green-400">
-                Add to cart
-              </button>
+              <div className="rounded-md overflow-hidden flex items-center justify-center h-10 w-36 bg-green-500 text-white hover:bg-green-400">
+                <AddToCart product={product} />
+              </div>
             </div>
           </div>
         ))

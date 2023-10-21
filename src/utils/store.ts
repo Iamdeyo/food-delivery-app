@@ -15,20 +15,19 @@ export const useCartStore = create(
       totalItems: INITIAL_STATE.totalItems,
       totalPrice: INITIAL_STATE.totalPrice,
       addTocart(item) {
-        const products = get().products;
-        const productInState = products.find(
+        const allCartProducts = get().products;
+        const productInState = allCartProducts.find(
           (product) => product.id === item.id
         );
-
         if (productInState) {
-          const updatedProducts = products.map((product) =>
+          const updatedProducts = allCartProducts.map((product) =>
             product.id === productInState.id
               ? {
-                  ...item,
+                  ...product,
                   quantity: item.quantity + product.quantity,
                   price: item.price + product.price,
                 }
-              : item
+              : product
           );
           set((state) => ({
             products: updatedProducts,
